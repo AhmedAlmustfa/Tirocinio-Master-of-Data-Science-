@@ -18,8 +18,7 @@ model <- readRDS("model.rds")
 library(readr)
 df <- read.csv("australian.csv")
 
-# Source helper functions -----
-#source("helpers.R")
+
 
   # Define UI
   ui <- fluidPage(theme = shinytheme("cerulean"),
