@@ -1,14 +1,8 @@
 ####################################
-# Data Professor                   #
-# http://youtube.com/dataprofessor #
-# http://github.com/dataprofessor  #
+# An app to predict a loan default
 ####################################
 
-# Modified from Winston Chang, 
-# https://shiny.rstudio.com/gallery/shiny-theme-selector.html
 
-# Concepts about Reactive programming used by Shiny, 
-# https://shiny.rstudio.com/articles/reactivity-overview.html
 
 # Load R packages
 library(shiny)
