@@ -14,3 +14,7 @@
 
 #### For more details about shiny app dockerization checkout the following link:
 #### https://www.statworx.com/en/content-hub/blog/how-to-dockerize-shinyapps/
+
+
+# Loan prediction app:
+##  https://mustafa22.shinyapps.io/predicting-loans/
