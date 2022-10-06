@@ -1,0 +1,103 @@
+---
+title: "Work flow"
+format:
+  html:
+   theme: flatly
+   code-fold: true
+   toc: true
+   number-sections: true
+---
+
+
+# Shiny modules for repeated structurees
+
+## Why Modules?
+The simplest way to define a modules that, modules can be thought of as "function-ization" of a set of Shiny UI and server elements. The magic of modules comes because these functions are constructed in a special way that creates a *namespace*. So far, when writing an app, the names (ids) of the controls are global: all parts of your server function can see all parts of your UI. Modules give you the ability to create controls that can only be seen from within the module. This is called a namespace because it creates “spaces” of “names” that are isolated from the rest of the app.
+
+Shiny modules have two big advantages:
+
+::: {.incremental}
+* Namespacing makes it easier to understand how your app works because you can write, analyse, and test individual components in isolation.
+* because modules are functions they help you reuse code; anything you can do with a function, you can do with a module. 
+:::
+
+
+For more depth in the argument visit: [Mastering Shiny Book](https://mastering-shiny.org/scaling-modules.html)
+
+
+
+## Motivation
+The example that I am going to illustrate has nearly identical UI or server function that have been used over and over in the same app, and here comes the benefit of using modules to avoid repeating the codes. The app in this example simply makes scatterplot and table for different dataset. Beloow is a preview of the final application.
+
+![The preview of the final app](Screenshot (47).png)
+
+## Set-up the required libraries:
+
+::: {.incremental}
+* load **library(shiny)**
+* load **library(ggplot2)**
+:::
+
+The first thing that I did is I created new R file with the name *app-modularized* and to creat the Skeleton of the module, type shinymod in Rstudio and hit enter and the structure of the module will pup-out I rename the two part as *plot_UI* and *plot_server* and those parts needs to be filled accordingly. 
+
+## Modularizing the UI
+The three tabPanels below have identically the same patterns. 
+
+
+::: {layout-ncol=2}
+![The first tabPanel](Screenshot (58).png){#fig-penguins}
+
+![The second tabPanel](Screenshot (59).png){#fig-pen}
+
+![The third tabPanel](Screenshot (60).png){#fig-pen22}
+:::
+
+### The UI module function 
+The UI modul function consist of two arguments, id and and the changing aspects in the example *dataset* since the the choices is deifferent for each selectInput().
+The first line of a UI module function is always ns <- NS(id), which creates a shorthand way to add the base id to the id type. So instead of the selectInput()'s name being "palmerpenguins::penguins", "iris",  or "mtcars", I set it as ns("The variable selected"). All ids need to use ns() to add the namespace to their ID.
+Then in the taglist part I took one of the repeated tabpanels (penguins part) copy pasted in the taglist and eliminate all the ids or penguins, because this part will be handeld for us by the *ns* function so the *ns* function does exactly what I did manually, it appends an id at the end of the variable name at the id name that we want, so if we call this ui with an id penguin then it will wrap all the ids.
+
+
+![The function that avoid repeation of tabPanels](Screenshot (52).png){#fig-pen28}
+
+
+
+
+:::{.callout-note}
+Now the tabPanel can be replaced with just the following code.
+:::
+
+![The three tabpanels in the UI](Screenshot (55).png){#fig-pen27}
+
+
+## Modularizing server functions
+In the the script below we have three functions that creats the output plots for each dataset, but this code is largely redundant, 
+
+::: {layout-ncol=2}
+![The server function for the app](Screenshot (61).png){#fig-pen61}
+![The server function for the app](Screenshot (62).png){#fig-pen62}
+:::
+
+### The module server
+The second step to modularizing code is creating a server function, where you can write the functions that relate to the input and output in UI function, so in this illustration I include two functions, one to produce the output plot and the other for producing the output table.
+
+The first argoment in the server function is id. The second argument in the example here is the argument that take different data **dataset** that will be used in different plots and tables.
+
+A server function always contains moduleServer() set up like below.
+
+
+![Example of module server](Screenshot (57).png){#fig-pen15}
+
+Now we can copy and paste one of our duplicated code from the server function and throw it into the module server that I call it **plot_server**, we get rid of all the appended id tags and the part of the data in ggplot needs to be dependent on the data so we replace it with **dataset** which is the changing aspect 
+
+![The server function that avoid repeatation](Screenshot (53).png){#fig-pen15}
+
+:::{.callout-note}
+Now, you can replace the four functions inside the server function with these three lines of code.
+:::
+
+![The lines that the functions in the app](Screenshot (56).png){#fig-pen15}
+
+## Conclusion
+In this examlpe we reduce a numbers of lines of code through the use of shiny moduls because the app is simple, but shiny moduls can save a lot of times and effeorts, for instance in this example if we want to change the plot layout "geom" we just need to change it in one function, as well if we want to extend this app to even more datasets we can do so by just adding a line of code in the UI and server function, and this exactly what I did by adding two datasets from ggplot, **diamonds** and **mpg**. and this is one of the power of using modules.
+
