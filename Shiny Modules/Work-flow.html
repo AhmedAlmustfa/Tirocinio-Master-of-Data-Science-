@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Work flow</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Work-flow_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Work-flow_files/libs/quarto-html/quarto.js"></script>
+<script src="Work-flow_files/libs/quarto-html/popper.min.js"></script>
+<script src="Work-flow_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Work-flow_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Work-flow_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Work-flow_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Work-flow_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Work-flow_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Work-flow_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#shiny-modules-for-repeated-structurees" id="toc-shiny-modules-for-repeated-structurees" class="nav-link active" data-scroll-target="#shiny-modules-for-repeated-structurees"><span class="toc-section-number">1</span>  Shiny modules for repeated structurees</a>
+  <ul class="collapse">
+  <li><a href="#why-modules" id="toc-why-modules" class="nav-link" data-scroll-target="#why-modules"><span class="toc-section-number">1.1</span>  Why Modules?</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation"><span class="toc-section-number">1.2</span>  Motivation</a></li>
+  <li><a href="#set-up-the-required-libraries" id="toc-set-up-the-required-libraries" class="nav-link" data-scroll-target="#set-up-the-required-libraries"><span class="toc-section-number">1.3</span>  Set-up the required libraries:</a></li>
+  <li><a href="#modularizing-the-ui" id="toc-modularizing-the-ui" class="nav-link" data-scroll-target="#modularizing-the-ui"><span class="toc-section-number">1.4</span>  Modularizing the UI</a>
+  <ul class="collapse">
+  <li><a href="#the-ui-module-function" id="toc-the-ui-module-function" class="nav-link" data-scroll-target="#the-ui-module-function"><span class="toc-section-number">1.4.1</span>  The UI module function</a></li>
+  </ul></li>
+  <li><a href="#modularizing-server-functions" id="toc-modularizing-server-functions" class="nav-link" data-scroll-target="#modularizing-server-functions"><span class="toc-section-number">1.5</span>  Modularizing server functions</a>
+  <ul class="collapse">
+  <li><a href="#the-module-server" id="toc-the-module-server" class="nav-link" data-scroll-target="#the-module-server"><span class="toc-section-number">1.5.1</span>  The module server</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="toc-section-number">1.6</span>  Conclusion</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Work flow</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="shiny-modules-for-repeated-structurees" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Shiny modules for repeated structurees</h1>
+<section id="why-modules" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="why-modules"><span class="header-section-number">1.1</span> Why Modules?</h2>
+<p>The simplest way to define a modules that, modules can be thought of as “function-ization” of a set of Shiny UI and server elements. The magic of modules comes because these functions are constructed in a special way that creates a <em>namespace</em>. So far, when writing an app, the names (ids) of the controls are global: all parts of your server function can see all parts of your UI. Modules give you the ability to create controls that can only be seen from within the module. This is called a namespace because it creates “spaces” of “names” that are isolated from the rest of the app.</p>
+<p>Shiny modules have two big advantages:</p>
+<div class="incremental">
+<ul class="incremental">
+<li>Namespacing makes it easier to understand how your app works because you can write, analyse, and test individual components in isolation.</li>
+<li>because modules are functions they help you reuse code; anything you can do with a function, you can do with a module.</li>
+</ul>
+</div>
+<p>For more depth in the argument visit: <a href="https://mastering-shiny.org/scaling-modules.html">Mastering Shiny Book</a></p>
+</section>
+<section id="motivation" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="motivation"><span class="header-section-number">1.2</span> Motivation</h2>
+<p>The example that I am going to illustrate has nearly identical UI or server function that have been used over and over in the same app, and here comes the benefit of using modules to avoid repeating the codes. The app in this example simply makes scatterplot and table for different dataset. Beloow is a preview of the final application.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(47).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The preview of the final app</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="set-up-the-required-libraries" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="set-up-the-required-libraries"><span class="header-section-number">1.3</span> Set-up the required libraries:</h2>
+<div class="incremental">
+<ul class="incremental">
+<li>load <strong>library(shiny)</strong></li>
+<li>load <strong>library(ggplot2)</strong></li>
+</ul>
+</div>
+<p>The first thing that I did is I created new R file with the name <em>app-modularized</em> and to creat the Skeleton of the module, type shinymod in Rstudio and hit enter and the structure of the module will pup-out I rename the two part as <em>plot_UI</em> and <em>plot_server</em> and those parts needs to be filled accordingly.</p>
+</section>
+<section id="modularizing-the-ui" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="modularizing-the-ui"><span class="header-section-number">1.4</span> Modularizing the UI</h2>
+<p>The three tabPanels below have identically the same patterns.</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-penguins" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(58).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: The first tabPanel</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-pen" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(59).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: The second tabPanel</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-pen22" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(60).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: The third tabPanel</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<section id="the-ui-module-function" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="the-ui-module-function"><span class="header-section-number">1.4.1</span> The UI module function</h3>
+<p>The UI modul function consist of two arguments, id and and the changing aspects in the example <em>dataset</em> since the the choices is deifferent for each selectInput(). The first line of a UI module function is always ns &lt;- NS(id), which creates a shorthand way to add the base id to the id type. So instead of the selectInput()’s name being “palmerpenguins::penguins”, “iris”, or “mtcars”, I set it as ns(“The variable selected”). All ids need to use ns() to add the namespace to their ID. Then in the taglist part I took one of the repeated tabpanels (penguins part) copy pasted in the taglist and eliminate all the ids or penguins, because this part will be handeld for us by the <em>ns</em> function so the <em>ns</em> function does exactly what I did manually, it appends an id at the end of the variable name at the id name that we want, so if we call this ui with an id penguin then it will wrap all the ids.</p>
+<div id="fig-pen28" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(52).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: The function that avoid repeation of tabPanels</figcaption><p></p>
+</figure>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now the tabPanel can be replaced with just the following code.</p>
+</div>
+</div>
+<div id="fig-pen27" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(55).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: The three tabpanels in the UI</figcaption><p></p>
+</figure>
+</div>
+</section>
+</section>
+<section id="modularizing-server-functions" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="modularizing-server-functions"><span class="header-section-number">1.5</span> Modularizing server functions</h2>
+<p>In the the script below we have three functions that creats the output plots for each dataset, but this code is largely redundant,</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="pics/Screenshot%20(61).png" id="fig-pen61" class="img-fluid" alt="The server function for the app"> <img src="pics/Screenshot%20(62).png" id="fig-pen62" class="img-fluid" alt="The server function for the app"></p>
+</div>
+</div>
+</div>
+<section id="the-module-server" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="the-module-server"><span class="header-section-number">1.5.1</span> The module server</h3>
+<p>The second step to modularizing code is creating a server function, where you can write the functions that relate to the input and output in UI function, so in this illustration I include two functions, one to produce the output plot and the other for producing the output table.</p>
+<p>The first argoment in the server function is id. The second argument in the example here is the argument that take different data <strong>dataset</strong> that will be used in different plots and tables.</p>
+<p>A server function always contains moduleServer() set up like below.</p>
+<div id="fig-pen15" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(57).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6: Example of module server</figcaption><p></p>
+</figure>
+</div>
+<p>Now we can copy and paste one of our duplicated code from the server function and throw it into the module server that I call it <strong>plot_server</strong>, we get rid of all the appended id tags and the part of the data in ggplot needs to be dependent on the data so we replace it with <strong>dataset</strong> which is the changing aspect</p>
+<div id="fig-pen15" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(53).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;7: The server function that avoid repeatation</figcaption><p></p>
+</figure>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now, you can replace the four functions inside the server function with these three lines of code.</p>
+</div>
+</div>
+<div id="fig-pen15" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(56).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;8: The lines that the functions in the app</figcaption><p></p>
+</figure>
+</div>
+</section>
+</section>
+<section id="conclusion" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">1.6</span> Conclusion</h2>
+<p>In this examlpe we reduce a numbers of lines of code through the use of shiny moduls because the app is simple, but shiny moduls can save a lot of times and effeorts, for instance in this example if we want to change the plot layout “geom” we just need to change it in one function, as well if we want to extend this app to even more datasets we can do so by just adding a line of code in the UI and server function, and this exactly what I did by adding two datasets from ggplot, <strong>diamonds</strong> and <strong>mpg</strong>. and this is one of the power of using modules.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
