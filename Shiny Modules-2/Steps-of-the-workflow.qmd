@@ -1,0 +1,107 @@
+---
+title: "Shiny Modules"
+format:
+  html:
+   theme: flatly
+   code-fold: true
+   toc: true
+   number-sections: true
+---
+
+# Shiny modules for repeated structurees
+
+## Why Modules?
+The simplest way to define a modules that, modules can be thought of as "function-ization" of a set of Shiny UI and server elements. The magic of modules comes because these functions are constructed in a special way that creates a *namespace*. So far, when writing an app, the names (ids) of the controls are global: all parts of your server function can see all parts of your UI. Modules give you the ability to create controls that can only be seen from within the module. This is called a namespace because it creates “spaces” of “names” that are isolated from the rest of the app.
+
+Shiny modules have two big advantages:
+
+::: {.incremental}
+* Namespacing makes it easier to understand how your app works because you can write, analyse, and test individual components in isolation.
+* because modules are functions they help you reuse code; anything you can do with a function, you can do with a module. 
+:::
+
+
+For more depth in the argument visit: [Mastering Shiny Book](https://mastering-shiny.org/scaling-modules.html)
+
+
+
+## Motivation
+The example that I am going to illustrate here is a simple shiny app that consis of 4 windos:
+::: {.incremental}
+* **Random Forest:** gives information about the algorithm random forest.
+* **Visualization:** illustrates scatterplot and calculate the correlation value.
+* **Prediction:** shows a prediction model that takes inputs and calclate the probability of                    the loan default.
+* **Downaload:** it shows a blank page.
+
+The app is consist of 4 panls with different functions, the goal here is to simplify the functionality of the app by using shiny modules and break the codes into different parts so that they can be called from the main app without having to run long code in the UI or the server function. To be spasific here we just take the part of the visualization and prediction windows and creat functions for the windows, since the last page *Dawnload* is left blank and the first widow is just a text.
+
+The figures below represent the app in the different navigation bars: 
+
+::: {layout-ncol=2}
+![Random Forest Algorithm](pics/Screenshot (68).png){#fig-penguins}
+
+![The visualization](pics/Screenshot (69).png){#fig-pen}
+
+![The prediction model](pics/Screenshot (72).png){#fig-pen22}
+
+![The download page](pics/Screenshot (71).png){#fig-pen22}
+:::
+
+
+## Set-up the required libraries:
+
+::: {.incremental}
+* load **library(shiny)**
+* load **library(shinythemes)**
+* load **library(data.table)**
+* load **library(ggplot2)**
+* load **library(randomForest)**
+* load **library(DT)**
+:::
+
+To make use of the shiny modules the first thing that I did is I created new R files with the name *Vis-mod.R* and *pred-mod.R*, which are containig the visaulization and prediction functions and to creat the Skeleton of the module, type shinymod in Rstudio and hit enter and the structure of the module will pup-out I rename the two part as *rand_ui* and *rand_server*, *pred_ui*and *pred_server* respectively. 
+
+## Modularizing Visualization function
+### The UI module function 
+
+The UI modul function consist of two arguments, id and the arqument that take the dataset in the example *df* . The first line of a UI module function is always ns <- NS(id), which creates a shorthand way to add the base id to the id type. So instead in the selectInput() function I set it as ns("The variable selected"). All ids need to use ns() to add the namespace to their ID. So the objective of the function ns() is to appends an id at the end of the variable name at the id name that we want, so if we call this ui with an id penguin then it will wrap all the ids. After selecting the variables and append the to ns function we add the part about coloring and enlarging the dots of the scotterplot and append them to ns function as well. in the main panel that represent the output of the model in the form of scatterplot and the calculate correlation we append them to the ns function also.
+
+### The server module function
+
+The first argoment in the model server function is id, the second argument  is the dataset in our app is **df** that will be used to create the scatterplot and the calculation of correlations.
+Then in the moduleserver is inserted the function that relate to the input and output in UI function, so in this illustration I include two functions, one to produce the output scatterplot and the other for producing the correlation.
+
+A server function always contains moduleServer() set up like below.
+
+
+![Example of module server](pics/Screenshot (57).png){#fig-pen15}
+
+
+## Modularizing pediction function
+### The UI module function
+Here as well we create **pred_ui** as a UI module function that takes id and df and create ns() to append the ids. However for each numericInput ID we wraped the inputid with ns function and since we have submit button we wraped the actionButton with ns id as well, and for the mainpanel the outputs are wraped with ns function
+
+
+### The server module function
+As in the case of visualization we foloow the same steps by creating **pred_server** that takes id and df as inputs, and then we creat moduleserver function then copy the code from the app and pasted it.
+
+## Puting all the pieces together
+Now that we have done from moduling prediction and visualization , it's time create the app with the usual structure. However, now in the Ui function we can just call the ui module function in each tabpanel and for the server function as well we just call the server module function and pass the ids in the UI and the data required . in the following we can see the lines of codes for the:
+
+:::{.callout-note}
+Now, you can replace the functions inside the UI and server function with these lines of code.
+:::
+
+::: {layout-ncol=2}
+![Random Forest Algorithm](pics/Screenshot (75).png){#fig-p}
+:::
+
+::: {layout-ncol=2}
+![The visualization](pics/Screenshot (74).png){#fig-pe}
+:::
+
+:::{.callout-note}
+Note **Model.rds** is the file where we trained the random forest algorithm.
+:::
+
+

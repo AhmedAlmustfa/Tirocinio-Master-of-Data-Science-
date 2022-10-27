@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Shiny Modules</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Steps-of-the-workflow_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Steps-of-the-workflow_files/libs/quarto-html/quarto.js"></script>
+<script src="Steps-of-the-workflow_files/libs/quarto-html/popper.min.js"></script>
+<script src="Steps-of-the-workflow_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Steps-of-the-workflow_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Steps-of-the-workflow_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Steps-of-the-workflow_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Steps-of-the-workflow_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Steps-of-the-workflow_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Steps-of-the-workflow_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#shiny-modules-for-repeated-structurees" id="toc-shiny-modules-for-repeated-structurees" class="nav-link active" data-scroll-target="#shiny-modules-for-repeated-structurees"><span class="toc-section-number">1</span>  Shiny modules for repeated structurees</a>
+  <ul class="collapse">
+  <li><a href="#why-modules" id="toc-why-modules" class="nav-link" data-scroll-target="#why-modules"><span class="toc-section-number">1.1</span>  Why Modules?</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation"><span class="toc-section-number">1.2</span>  Motivation</a></li>
+  <li><a href="#set-up-the-required-libraries" id="toc-set-up-the-required-libraries" class="nav-link" data-scroll-target="#set-up-the-required-libraries"><span class="toc-section-number">1.3</span>  Set-up the required libraries:</a></li>
+  <li><a href="#modularizing-visualization-function" id="toc-modularizing-visualization-function" class="nav-link" data-scroll-target="#modularizing-visualization-function"><span class="toc-section-number">1.4</span>  Modularizing Visualization function</a>
+  <ul class="collapse">
+  <li><a href="#the-ui-module-function" id="toc-the-ui-module-function" class="nav-link" data-scroll-target="#the-ui-module-function"><span class="toc-section-number">1.4.1</span>  The UI module function</a></li>
+  <li><a href="#the-server-module-function" id="toc-the-server-module-function" class="nav-link" data-scroll-target="#the-server-module-function"><span class="toc-section-number">1.4.2</span>  The server module function</a></li>
+  </ul></li>
+  <li><a href="#modularizing-pediction-function" id="toc-modularizing-pediction-function" class="nav-link" data-scroll-target="#modularizing-pediction-function"><span class="toc-section-number">1.5</span>  Modularizing pediction function</a>
+  <ul class="collapse">
+  <li><a href="#the-ui-module-function-1" id="toc-the-ui-module-function-1" class="nav-link" data-scroll-target="#the-ui-module-function-1"><span class="toc-section-number">1.5.1</span>  The UI module function</a></li>
+  <li><a href="#the-server-module-function-1" id="toc-the-server-module-function-1" class="nav-link" data-scroll-target="#the-server-module-function-1"><span class="toc-section-number">1.5.2</span>  The server module function</a></li>
+  </ul></li>
+  <li><a href="#puting-all-the-pieces-together" id="toc-puting-all-the-pieces-together" class="nav-link" data-scroll-target="#puting-all-the-pieces-together"><span class="toc-section-number">1.6</span>  Puting all the pieces together</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Shiny Modules</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="shiny-modules-for-repeated-structurees" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Shiny modules for repeated structurees</h1>
+<section id="why-modules" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="why-modules"><span class="header-section-number">1.1</span> Why Modules?</h2>
+<p>The simplest way to define a modules that, modules can be thought of as “function-ization” of a set of Shiny UI and server elements. The magic of modules comes because these functions are constructed in a special way that creates a <em>namespace</em>. So far, when writing an app, the names (ids) of the controls are global: all parts of your server function can see all parts of your UI. Modules give you the ability to create controls that can only be seen from within the module. This is called a namespace because it creates “spaces” of “names” that are isolated from the rest of the app.</p>
+<p>Shiny modules have two big advantages:</p>
+<div class="incremental">
+<ul class="incremental">
+<li>Namespacing makes it easier to understand how your app works because you can write, analyse, and test individual components in isolation.</li>
+<li>because modules are functions they help you reuse code; anything you can do with a function, you can do with a module.</li>
+</ul>
+</div>
+<p>For more depth in the argument visit: <a href="https://mastering-shiny.org/scaling-modules.html">Mastering Shiny Book</a></p>
+</section>
+<section id="motivation" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="motivation"><span class="header-section-number">1.2</span> Motivation</h2>
+<p>The example that I am going to illustrate here is a simple shiny app that consis of 4 windos: ::: {.incremental} * <strong>Random Forest:</strong> gives information about the algorithm random forest. * <strong>Visualization:</strong> illustrates scatterplot and calculate the correlation value. * <strong>Prediction:</strong> shows a prediction model that takes inputs and calclate the probability of the loan default. * <strong>Downaload:</strong> it shows a blank page.</p>
+<p>The app is consist of 4 panls with different functions, the goal here is to simplify the functionality of the app by using shiny modules and break the codes into different parts so that they can be called from the main app without having to run long code in the UI or the server function. To be spasific here we just take the part of the visualization and prediction windows and creat functions for the windows, since the last page <em>Dawnload</em> is left blank and the first widow is just a text.</p>
+<p>The figures below represent the app in the different navigation bars:</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-penguins" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(68).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Random Forest Algorithm</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-pen" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(69).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: The visualization</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-pen22" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(72).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: The prediction model</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-pen22" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(71).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: The download page</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="set-up-the-required-libraries" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="set-up-the-required-libraries"><span class="header-section-number">1.3</span> Set-up the required libraries:</h2>
+<div class="incremental">
+<ul class="incremental">
+<li>load <strong>library(shiny)</strong></li>
+<li>load <strong>library(shinythemes)</strong></li>
+<li>load <strong>library(data.table)</strong></li>
+<li>load <strong>library(ggplot2)</strong></li>
+<li>load <strong>library(randomForest)</strong></li>
+<li>load <strong>library(DT)</strong></li>
+</ul>
+</div>
+<p>To make use of the shiny modules the first thing that I did is I created new R files with the name <em>Vis-mod.R</em> and <em>pred-mod.R</em>, which are containig the visaulization and prediction functions and to creat the Skeleton of the module, type shinymod in Rstudio and hit enter and the structure of the module will pup-out I rename the two part as <em>rand_ui</em> and <em>rand_server</em>, <em>pred_ui</em>and <em>pred_server</em> respectively.</p>
+</section>
+<section id="modularizing-visualization-function" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="modularizing-visualization-function"><span class="header-section-number">1.4</span> Modularizing Visualization function</h2>
+<section id="the-ui-module-function" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="the-ui-module-function"><span class="header-section-number">1.4.1</span> The UI module function</h3>
+<p>The UI modul function consist of two arguments, id and the arqument that take the dataset in the example <em>df</em> . The first line of a UI module function is always ns &lt;- NS(id), which creates a shorthand way to add the base id to the id type. So instead in the selectInput() function I set it as ns(“The variable selected”). All ids need to use ns() to add the namespace to their ID. So the objective of the function ns() is to appends an id at the end of the variable name at the id name that we want, so if we call this ui with an id penguin then it will wrap all the ids. After selecting the variables and append the to ns function we add the part about coloring and enlarging the dots of the scotterplot and append them to ns function as well. in the main panel that represent the output of the model in the form of scatterplot and the calculate correlation we append them to the ns function also.</p>
+</section>
+<section id="the-server-module-function" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="the-server-module-function"><span class="header-section-number">1.4.2</span> The server module function</h3>
+<p>The first argoment in the model server function is id, the second argument is the dataset in our app is <strong>df</strong> that will be used to create the scatterplot and the calculation of correlations. Then in the moduleserver is inserted the function that relate to the input and output in UI function, so in this illustration I include two functions, one to produce the output scatterplot and the other for producing the correlation.</p>
+<p>A server function always contains moduleServer() set up like below.</p>
+<div id="fig-pen15" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(57).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: Example of module server</figcaption><p></p>
+</figure>
+</div>
+</section>
+</section>
+<section id="modularizing-pediction-function" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="modularizing-pediction-function"><span class="header-section-number">1.5</span> Modularizing pediction function</h2>
+<section id="the-ui-module-function-1" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="the-ui-module-function-1"><span class="header-section-number">1.5.1</span> The UI module function</h3>
+<p>Here as well we create <strong>pred_ui</strong> as a UI module function that takes id and df and create ns() to append the ids. However for each numericInput ID we wraped the inputid with ns function and since we have submit button we wraped the actionButton with ns id as well, and for the mainpanel the outputs are wraped with ns function</p>
+</section>
+<section id="the-server-module-function-1" class="level3" data-number="1.5.2">
+<h3 data-number="1.5.2" class="anchored" data-anchor-id="the-server-module-function-1"><span class="header-section-number">1.5.2</span> The server module function</h3>
+<p>As in the case of visualization we foloow the same steps by creating <strong>pred_server</strong> that takes id and df as inputs, and then we creat moduleserver function then copy the code from the app and pasted it.</p>
+</section>
+</section>
+<section id="puting-all-the-pieces-together" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="puting-all-the-pieces-together"><span class="header-section-number">1.6</span> Puting all the pieces together</h2>
+<p>Now that we have done from moduling prediction and visualization , it’s time create the app with the usual structure. However, now in the Ui function we can just call the ui module function in each tabpanel and for the server function as well we just call the server module function and pass the ids in the UI and the data required . in the following we can see the lines of codes for the:</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now, you can replace the functions inside the UI and server function with these lines of code.</p>
+</div>
+</div>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-p" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(75).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6: Random Forest Algorithm</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-pe" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="pics/Screenshot%20(74).png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;7: The visualization</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note <strong>Model.rds</strong> is the file where we trained the random forest algorithm.</p>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
